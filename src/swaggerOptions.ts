@@ -3,7 +3,6 @@ import { configs } from "./app/configs";
 import { authSwaggerDocs } from "./app/modules/auth/auth.swagger";
 import { userSwaggerDocs } from "./app/modules/user/user.swagger";
 import { productsSwaggerDocs } from "./app/modules/products/products.swagger";
-import { testSwaggerDocs } from "./app/modules/test/test.swagger";
 
 
 
@@ -20,7 +19,7 @@ export const swaggerOptions = {
             ...userSwaggerDocs,
         
             ...productsSwaggerDocs,
-            ...testSwaggerDocs,},
+          },
         servers: configs.env === "production" ? [
             { url: "https://live-url.com" },
             { url: "http://localhost:5000" },

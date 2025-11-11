@@ -54,27 +54,27 @@ const register_user_into_db = async (payload: TRegisterPayload) => {
         const verificationLink = `${configs.jwt.front_end_url}/verified?token=${verifiedToken}`;
         // Commit the transaction
         await session.commitTransaction();
-        await sendMail({
-            to: payload?.email,
-            subject: "Thanks for creating account!",
-            textBody: `New Account successfully created on ${new Date().toLocaleDateString()}`,
-            name: payload?.name,
-            htmlBody: `
-            <p>Thanks for creating an account with us. We’re excited to have you on board! Click the button below to
-                verify your email and activate your account:</p>
+        // await sendMail({
+        //     to: payload?.email,
+        //     subject: "Thanks for creating account!",
+        //     textBody: `New Account successfully created on ${new Date().toLocaleDateString()}`,
+        //     name: payload?.name,
+        //     htmlBody: `
+        //     <p>Thanks for creating an account with us. We’re excited to have you on board! Click the button below to
+        //         verify your email and activate your account:</p>
 
 
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="${verificationLink}" target="_blank"
-                    style="background-color: #4CAF50; color: #ffffff; padding: 14px 28px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block; font-size: 18px;"
-                    class="btn">
-                    Verify My Email
-                </a>
-            </div>
+        //     <div style="text-align: center; margin: 30px 0;">
+        //         <a href="${verificationLink}" target="_blank"
+        //             style="background-color: #4CAF50; color: #ffffff; padding: 14px 28px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block; font-size: 18px;"
+        //             class="btn">
+        //             Verify My Email
+        //         </a>
+        //     </div>
 
-            <p>If you did not create this account, please ignore this email.</p>
-            `
-        })
+        //     <p>If you did not create this account, please ignore this email.</p>
+        //     `
+        // })
         return newAccount;
     } catch (error) {
         console.log(error)
