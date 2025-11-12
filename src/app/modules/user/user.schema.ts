@@ -1,21 +1,50 @@
 import { model, Schema } from "mongoose";
 import { TUser } from "./user.interface";
 
-const user_schema = new Schema<TUser>({
-    name: { type: String, required: true },
-    photo: { type: String, required: false },
-    accountId: { type: String, required: false, ref: "account" },
-    address: {
-        location: { type: String },
-        city: { type: String },
-        state: { type: String },
-        postCode: { type: String },
-        country: { type: String },
-        timeZone: { type: String }
-    }
-}, {
-    versionKey: false,
-    timestamps: true
-})
+const user_schema = new Schema<TUser>(
+  {
+    name: { type: String, required: true, trim: true },
 
-export const User_Model = model("user", user_schema)
+    phone: { type: String, required: true, unique: true, trim: true },
+
+    photo: { type: String, trim: true, required: false },
+
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      // make unique but allow multiple docs without email
+      unique: true,
+      sparse: true,
+      match: [
+        // simple RFC5322-ish check; tweak as needed
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        "Please provide a valid email.",
+      ],
+      required: false,
+    },
+
+    role: {
+      type: String,
+      enum: ["RENTER", "OWNER"],
+      default: "RENTER",
+    },
+
+    location: { type: String, trim: true, required: false },
+
+    isVerified: { type: Boolean, default: true },
+
+    accountStatus: {
+      type: String,
+      enum: ["ACTIVE", "INACTIVE", "SUSPENDED"],
+      default: "ACTIVE",
+      index: true,
+    },
+
+    // soft-delete flag
+    isDeleted: { type: Boolean, default: false, index: true },
+  },
+  { timestamps: true, versionKey: false }
+);
+
+export const User_Model = model("user", user_schema);

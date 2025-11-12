@@ -1,23 +1,16 @@
-import cookieParser from 'cookie-parser';
+import express, { Request, Response } from 'express'
 import cors from 'cors';
-import express, { Request, Response } from 'express';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUi from "swagger-ui-express";
-import globalErrorHandler from './app/middlewares/global_error_handler';
-import notFound from './app/middlewares/not_found_api';
-import appRouter from './routes';
-import { swaggerOptions } from './swaggerOptions';
+import globalErrorHandler from './app/middlewares/global_error_handler'
+import notFound from './app/middlewares/not_found_api'
+import cookieParser from 'cookie-parser'
+import appRouter from './routes'
 
 // define app
 const app = express()
-const swaggerSpec = swaggerJSDoc(swaggerOptions);
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // middleware
 app.use(cors({
-    origin: ["http://localhost:3000","*"],
-    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
-    credentials: true
+    origin: ["http://localhost:3000"]
 }))
 app.use(express.json({ limit: "100mb" }))
 app.use(express.raw())
