@@ -13,12 +13,13 @@ interface IResponse<T> {
 }
 
 const manageResponse = <T>(res: Response, payload: IResponse<T>) => {
-    res.status(payload.statusCode).json({
-        success: payload.success,
-        message: payload.message,
-        data: payload.data || undefined || null,
-        meta: payload.meta || undefined || null
-    })
-}
+  const body = {
+    success: payload.success,
+    ...(payload.message !== undefined ? { message: payload.message } : {}),
+    ...(payload.data != null ? { data: payload.data } : {}),   // only if not null/undefined
+    ...(payload.meta != null ? { meta: payload.meta } : {}),   // only if not null/undefined
+  };
 
+  res.status(payload.statusCode).json(body);
+};
 export default manageResponse

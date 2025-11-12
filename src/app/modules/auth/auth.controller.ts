@@ -14,27 +14,23 @@ const register_user = catchAsync(async (req, res) => {
     })
 })
 
-// const login_user = catchAsync(async (req, res) => {
-//     const result = await auth_services.login_user_from_db(req.body);
+const login_user = catchAsync(async (req, res) => {
+    const result = await auth_services.login_user_from_db(req.body);
 
-//     res.cookie('refreshToken', result.refreshToken, {
-//         secure: configs.env == 'production',
-//         httpOnly: true,
-//     });
-//     manageResponse(res, {
-//         statusCode: httpStatus.OK,
-//         success: true,
-//         message: 'User is logged in successful !',
-//         data: {
-//             accessToken: result.accessToken,
-//             role: result?.role
-//         },
-//     });
-// });
+   
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User is logged in successful !',
+        data: result,
+      
+
+    });
+});
 
 
 export const auth_controllers = {
     register_user,
-    // login_user,
+    login_user,
   
 }

@@ -1,5 +1,4 @@
 import { AppError } from "../../utils/app_error";
-;
 import httpStatus from "http-status";
 import bcrypt from "bcrypt";
 import { TUser } from "../user/user.interface";
@@ -8,6 +7,7 @@ import { jwtHelpers } from "../../utils/JWT";
 import { configs } from "../../configs";
 import { Secret } from "jsonwebtoken";
 import { isAccountExist } from "../../utils/isAccountExist";
+import { is } from "zod/v4/locales";
 // register user
 const register_user_into_db = async (payload: TUser) => {
   const isExistUser = await User_Model.findOne({
@@ -22,43 +22,35 @@ const register_user_into_db = async (payload: TUser) => {
   return result;
 };
 
-// login user
-// const login_user_from_db = async (payload: TLoginPayload) => {
-//   // check account info
-//   const isExistAccount = await isAccountExist(payload?.email);
+const login_user_from_db = async (payload: { phone: string }) => {
+  // check account info
+  const isExistAccount = (await User_Model.findOne({
+    phone: payload.phone,
+  })) as TUser & { _id: string };
+  console.log("🚀 ~ login_user_from_db ~ isExistAccount:", isExistAccount);
 
-//   const isPasswordMatch = await bcrypt.compare(
-//     payload.password,
-//     isExistAccount.password
-//   );
-//   if (!isPasswordMatch) {
-//     throw new AppError("Invalid password", httpStatus.UNAUTHORIZED);
-//   }
-//   const accessToken = jwtHelpers.generateToken(
-//     {
-//       email: isExistAccount.email,
-//       role: isExistAccount.role,
-//     },
-//     configs.jwt.access_token as Secret,
-//     configs.jwt.access_expires as string
-//   );
+  const accessToken = jwtHelpers.generateToken(
+    {
+      _id: isExistAccount._id,
+      name: isExistAccount.name,
+      phone: isExistAccount.phone,
+      role: isExistAccount.role,
+      isVerified: isExistAccount.isVerified,
+      accountStatus: isExistAccount.accountStatus,
+      isDeleted: isExistAccount.isDeleted,
+    },
+    configs.jwt.access_token as Secret,
+    configs.jwt.access_expires as string
+  );
 
-//   const refreshToken = jwtHelpers.generateToken(
-//     {
-//       email: isExistAccount.email,
-//       role: isExistAccount.role,
-//     },
-//     configs.jwt.refresh_token as Secret,
-//     configs.jwt.refresh_expires as string
-//   );
-//   return {
-//     accessToken: accessToken,
-//     refreshToken: refreshToken,
-//     role: isExistAccount.role,
-//   };
-// };
+  return {
+    user: isExistAccount,
+    accessToken: accessToken,
+    role: isExistAccount.role,
+  };
+};
 
 export const auth_services = {
   register_user_into_db,
-//   login_user_from_db,
+  login_user_from_db,
 };
