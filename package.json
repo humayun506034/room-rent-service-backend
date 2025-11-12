@@ -15,6 +15,7 @@
   "dependencies": {
     "@types/cors": "^2.8.19",
     "bcrypt": "^6.0.0",
+    "clicksend": "^5.0.79",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -27,6 +28,7 @@
     "multer": "^2.0.2",
     "nodemailer": "^7.0.6",
     "ts-node-dev": "^2.0.0",
+    "twilio": "^5.10.5",
     "zod": "^4.1.8"
   },
   "devDependencies": {
