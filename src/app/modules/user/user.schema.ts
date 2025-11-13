@@ -3,7 +3,7 @@ import { TUser } from "./user.interface";
 
 const user_schema = new Schema<TUser>(
   {
-    name: { type: String, required: true, trim: true },
+    name: { type: String, required: false, trim: true },
 
     phone: { type: String, required: true, unique: true, trim: true },
 
@@ -22,12 +22,6 @@ const user_schema = new Schema<TUser>(
         "Please provide a valid email.",
       ],
       required: false,
-    },
-
-    role: {
-      type: String,
-      enum: ["RENTER", "OWNER"],
-      default: "RENTER",
     },
 
     location: { type: String, trim: true, required: false },

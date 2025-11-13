@@ -1,9 +1,8 @@
 export type TUser = {
-  name: string;
+  name?: string;
   phone: string;
   photo?: string;
   email?: string;
-  role: "RENTER" | "OWNER";
   location?: string;
   isVerified?: boolean;
   accountStatus?: "ACTIVE" | "INACTIVE" | "SUSPENDED";
