@@ -63,7 +63,7 @@ const verify_register_otp = async (payload: {
   const isExistAccount = (await User_Model.findOne({
     phone: payload.phone,
   })) as TUser & { _id: string };
-  console.log("🚀 ~ verrify_register_otp ~ isExistAccount:", isExistAccount);
+  // console.log("🚀 ~ verrify_register_otp ~ isExistAccount:", isExistAccount);
 
   if (!isExistAccount) {
     throw new AppError("Account not found!!", httpStatus.NOT_FOUND);
