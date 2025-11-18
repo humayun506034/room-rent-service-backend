@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { AppError } from '../utils/app_error';
 import { configs } from '../configs';
 import { jwtHelpers, JwtPayloadType } from '../utils/JWT';
-import { Account_Model } from '../modules/auth/auth.schema';
+import { User_Model } from '../modules/user/user.schema';
 
 
 type Role = "ADMIN" | "USER"
@@ -23,12 +23,15 @@ const auth = (...roles: Role[]) => {
                 throw new AppError('You are not authorize!!', 401);
             }
             // check user
-            const isUserExist = await Account_Model.findOne({ email: verifiedUser?.email }).lean()
+            const isUserExist = await User_Model.findOne({ email: verifiedUser?.email }).lean()
             if (!isUserExist) {
                 throw new AppError("Account not found !", 404)
             }
-            if (isUserExist?.status == "BLOCK") {
-                throw new AppError("This Account is blocked !", 401)
+            if (isUserExist?.accountStatus == "INACTIVE") {
+                throw new AppError("This Account is INACTIVE !", 401)
+            }
+            if (isUserExist?.accountStatus == "SUSPENDED") {
+                throw new AppError("This Account is SUSPENDED !", 401)
             }
             if (isUserExist?.isDeleted) {
                 throw new AppError("This account is deleted", 401)
