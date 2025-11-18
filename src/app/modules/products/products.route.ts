@@ -4,7 +4,7 @@ import uploader from "../../middlewares/uploader";
 import auth from "../../middlewares/auth";
 import { ProductControllers } from "./products.controller";
 
-const userRoute = Router();
+const productRoute = Router();
 
 // userRoute.patch(
 //     "/update-profile",
@@ -14,11 +14,11 @@ const userRoute = Router();
 //         ProductControllers.addProduct()
 //     },
 // )
-userRoute.post(
-  "/update-profile",
-  auth("ADMIN"),
-  // uploader.single("image"),
+productRoute.post(
+  "/",
+  auth("ADMIN", "RENTER"),
+  uploader.array("images"),
   ProductControllers.addProduct
 );
 
-export default userRoute;
+export default productRoute;

@@ -1,3 +1,9 @@
+export type TReference = {
+  reference_name: string;
+  reference_phone: string;
+  reference_relationship: string;
+};
+
 export type TApartment =
   | {
       listing_type: "Normal Apartment" | "Furnished Apartment";
@@ -24,6 +30,11 @@ export type TApartment =
         | "Unfurnished"
         | "Internet Included"
       )[];
+
+      image_links?: string[];
+      owner_name: string;
+      owner_phone: string;
+      references: TReference[];
     }
   | {
       listing_type: "Normal Apartment" | "Furnished Apartment";
@@ -51,4 +62,8 @@ export type TApartment =
         | "Unfurnished"
         | "Internet Included"
       )[];
+      image_links?: string[];
+      owner_name: string;
+      owner_phone: string;
+      references: TReference[];
     };

@@ -44,6 +44,12 @@ const user_schema = new Schema<TUser>(
 
     // soft-delete flag
     isDeleted: { type: Boolean, default: false, index: true },
+    roles: {
+      type: [String], // array of strings
+      enum: ["ADMIN", "RENTER"], // allowed values
+      required: true,
+      default: ["RENTER"], // optional
+    },
   },
   { timestamps: true, versionKey: false }
 );

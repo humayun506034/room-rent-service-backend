@@ -116,6 +116,7 @@ const login_user_from_db = async (payload: { phone: string }) => {
       isVerified: isExistAccount.isVerified,
       accountStatus: isExistAccount.accountStatus,
       isDeleted: isExistAccount.isDeleted,
+      roles: isExistAccount.roles,
     },
     configs.jwt.access_token as Secret,
     configs.jwt.access_expires as string

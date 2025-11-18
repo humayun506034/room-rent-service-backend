@@ -11,4 +11,5 @@ export type TUser = {
   isVerified?: boolean;
   accountStatus?: "ACTIVE" | "INACTIVE" | "SUSPENDED";
   isDeleted?: boolean;
+  roles: ("ADMIN" | "RENTER")[];
 };
