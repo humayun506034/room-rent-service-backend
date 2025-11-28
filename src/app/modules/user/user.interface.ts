@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 
 export type TUser = {
   name?: string;
@@ -13,4 +14,5 @@ export type TUser = {
   accountStatus?: "ACTIVE" | "INACTIVE" | "SUSPENDED";
   isDeleted?: boolean;
   roles: ("ADMIN" | "RENTER"|"OWNER")[];
+  fevouriteAppartments ?: Types.ObjectId[]
 };

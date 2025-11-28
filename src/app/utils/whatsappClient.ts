@@ -1,6 +1,7 @@
 
 import { Client, LocalAuth } from "whatsapp-web.js";
 import qrcode from "qrcode-terminal";
+import { autoReplyHandler } from "../modules/autoReplay/autoReplay.service";
 
 let client: Client | null = null;
 let isReady: boolean = false;
@@ -51,6 +52,10 @@ client = new Client({
     isReady = false;
     console.log("❌ WhatsApp disconnected, reinitializing...");
     client?.initialize(); // auto restart
+  });
+
+  client.on("message", async (msg) => {
+  await autoReplyHandler(msg);
   });
 
   client.initialize();

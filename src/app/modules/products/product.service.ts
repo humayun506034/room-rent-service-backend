@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import { AppError } from "../../utils/app_error"
 import { TApartment } from "./product.interface"
 import { Apartment } from "./product.schema"
+import { User_Model } from '../user/user.schema';
 
 const addProduct = async(data:TApartment)=>{
     // console.log({data})
@@ -179,7 +180,64 @@ const addQueryProduct = async (_id: string, authorId: string) => {
   return result;
 };
 
+const getStack = async (authorId: string) => {
+  const result = await Apartment.find({ authorId });
 
+  const totalApartments = result.length;
+
+  const totalViews = result.reduce((sum, apt) => sum + (apt.viewedBy?.length || 0), 0);
+
+  const totalQueries = result.reduce((sum, apt) => sum + (apt.queryBy?.length || 0), 0);
+
+  return {
+    totalApartments,
+    totalViews,
+    totalQueries,
+  };
+};
+
+
+const addFevouriteApartment = async (_id:any, apartmentId:string) => {
+
+    const isItYourOwnApartment = await Apartment.findById(apartmentId)
+  console.log(isItYourOwnApartment)
+
+ if (isItYourOwnApartment?.authorId?.toString() === _id.toString()) {
+  throw new AppError(
+    "You can't favourite your own product",
+    httpStatus.BAD_REQUEST
+  );
+  }
+
+  const isAlreadyFevourite = await User_Model.find({_id,fevouriteAppartments:{$in:[apartmentId]}})
+  console.log(_id)
+
+  if(isAlreadyFevourite.length>0){
+    throw new AppError("Product already fevourite", httpStatus.BAD_REQUEST);
+  }
+
+
+ const result = await User_Model.findOneAndUpdate(
+    { _id },
+    { $addToSet: { fevouriteAppartments: apartmentId } },
+    { new: true }
+ )
+ return result
+};
+
+const myselfFevouriteApartment = async (_id:any) => {
+    const result = await User_Model.findById(_id).populate('fevouriteAppartments').select("fevouriteAppartments")
+    return result
+}
+
+
+const deleteFevouriteApartment = async (_id:any, apartmentId:string) => {
+    await User_Model.findOneAndUpdate(
+        { _id },
+        { $pull: { fevouriteAppartments: apartmentId } },
+        { new: true }
+     )
+}
 
 export const ProductService ={
     addProduct,
@@ -188,5 +246,9 @@ export const ProductService ={
     addBookingDate,
     getMySelfProduct,
     addViewedProduct,
-    addQueryProduct
+    addQueryProduct,
+    getStack,
+    addFevouriteApartment,
+    myselfFevouriteApartment,
+    deleteFevouriteApartment
 }

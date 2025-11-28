@@ -12,7 +12,8 @@ const router = Router();
 router.get('/get-all',ProductControllers.getAllProduct)
 router.get('/get-single/:id', ProductControllers.getSingleProduct)
 router.get("/get-myself-product",auth("ADMIN" , "RENTER","OWNER"), ProductControllers.getMySelfProduct)
-
+router.get('/get-stat', auth("ADMIN" , "RENTER","OWNER"), ProductControllers.getStack)
+router.get('/myself-fevourite-apartment', auth("ADMIN" , "RENTER","OWNER"), ProductControllers.myselfFevouriteApartment)
 router.post(
   "/",
   auth("ADMIN" , "RENTER","OWNER"),
@@ -27,6 +28,6 @@ router.post('/add-booking-date/:id',  auth("ADMIN" , "RENTER","OWNER"),
 
 
   router.post('/add-query-product/:id', auth("ADMIN" , "RENTER","OWNER"), ProductControllers.addQueryProduct)
-
-
+router.post('/add-fevourite-apartment', auth("ADMIN" , "RENTER","OWNER"), ProductControllers.addFevouriteApartment)
+router.delete('/delete-fevourite-apartment', auth("ADMIN" , "RENTER","OWNER"), ProductControllers.deleteFevouriteApartment)
 export const productRoute=router;

@@ -1,0 +1,13 @@
+2025/11/28-16:12:02.737 cf79 Reusing MANIFEST /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/11/28-16:12:02.737 cf79 Recovering log #102
+2025/11/28-16:12:02.746 cf79 Reusing old log /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/000102.log 
+2025/11/28-16:12:04.511 cf78 Level-0 table #107: started
+2025/11/28-16:12:04.514 cf78 Level-0 table #107: 126442 bytes OK
+2025/11/28-16:12:04.517 cf78 Delete type=0 #102
+2025/11/28-16:12:04.517 cf90 Manual compaction at level-0 from '\x00)\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00*\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/11/28-16:12:06.496 cf8f Compacting 1@1 + 1@2 files
+2025/11/28-16:12:06.530 cf8f Generated table #108@1: 38563 keys, 1565630 bytes
+2025/11/28-16:12:06.530 cf8f Compacted 1@1 + 1@2 files => 1565630 bytes
+2025/11/28-16:12:06.532 cf8f compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/11/28-16:12:06.533 cf8f Delete type=2 #104
+2025/11/28-16:12:06.533 cf8f Delete type=2 #107

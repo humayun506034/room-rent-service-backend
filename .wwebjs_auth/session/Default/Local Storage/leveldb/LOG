@@ -1,2 +1,3 @@
-2025/11/28-10:20:20.355 357e Creating DB /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/Local Storage/leveldb since it was missing.
-2025/11/28-10:20:20.373 357e Reusing MANIFEST /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/Local Storage/leveldb/MANIFEST-000001
+2025/11/28-16:12:46.245 d07c Reusing MANIFEST /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/Local Storage/leveldb/MANIFEST-000001
+2025/11/28-16:12:46.245 d07c Recovering log #7
+2025/11/28-16:12:46.245 d07c Reusing old log /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/Local Storage/leveldb/000007.log 

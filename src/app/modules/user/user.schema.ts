@@ -53,6 +53,12 @@ const user_schema = new Schema<TUser>(
       required: true,
       default: ["RENTER","OWNER"], // optional
     },
+     fevouriteAppartments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Apartment",
+      },
+    ],
   },
   { timestamps: true, versionKey: false }
 );

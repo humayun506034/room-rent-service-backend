@@ -184,6 +184,46 @@ const addQueryProduct = catchAsync(async (req:Request & { loggedUser?: any}, res
   });
 });
 
+const getStack = catchAsync(async (req:Request & { loggedUser?: any}, res) => {
+  const result = await ProductService.getStack(req.loggedUser._id);
+  manageResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Stack get Successfully",
+    data: result,
+  });
+});
+
+const addFevouriteApartment= catchAsync(async (req:Request & { loggedUser?: any}, res) => {
+  const result = await ProductService.addFevouriteApartment(req.loggedUser._id,req.body.apartmentId );
+  manageResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Product fevourite Successfully",
+    data: result,
+  });
+});
+
+const myselfFevouriteApartment = catchAsync(async (req:Request & { loggedUser?: any}, res) => {
+  const result = await ProductService.myselfFevouriteApartment(req.loggedUser._id);
+  manageResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: " fevourites apartment get Successfully",
+    data: result,
+  });
+})
+
+const deleteFevouriteApartment = catchAsync(async (req:Request & { loggedUser?: any}, res) => {
+  const result = await ProductService.deleteFevouriteApartment(req.loggedUser._id,req.body.apartmentId );
+  manageResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Deleted Successfully",
+    data: result,
+  });
+})
+
 export const ProductControllers = {
   addProduct,
   getAllProduct,
@@ -191,5 +231,9 @@ export const ProductControllers = {
   addBookingDate,
   getMySelfProduct,
   addViewedProduct,
-  addQueryProduct
+  addQueryProduct,
+  getStack,
+  addFevouriteApartment,
+  myselfFevouriteApartment,
+  deleteFevouriteApartment
 };
