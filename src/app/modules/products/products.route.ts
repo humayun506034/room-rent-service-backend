@@ -1,24 +1,32 @@
-import { NextFunction, Request, Response, Router } from "express";
-import uploader from "../../middlewares/uploader";
+import { Router } from "express";
 
 import auth from "../../middlewares/auth";
 import { ProductControllers } from "./products.controller";
+import { upload } from "../../middlewares/upload";
 
-const productRoute = Router();
+const router = Router();
 
-// userRoute.patch(
-//     "/update-profile",
-//     auth("ADMIN","USER"),
-//     uploader.single("image"),
-//     (req: Request, res: Response, next: NextFunction) => {
-//         ProductControllers.addProduct()
-//     },
-// )
-productRoute.post(
+
+
+
+router.get('/get-all',ProductControllers.getAllProduct)
+router.get('/get-single/:id', ProductControllers.getSingleProduct)
+router.get("/get-myself-product",auth("ADMIN" , "RENTER","OWNER"), ProductControllers.getMySelfProduct)
+
+router.post(
   "/",
-  auth("ADMIN", "RENTER"),
-  uploader.array("images"),
+  auth("ADMIN" , "RENTER","OWNER"),
+  upload.array("images"),
   ProductControllers.addProduct
 );
 
-export default productRoute;
+router.post('/add-booking-date/:id',  auth("ADMIN" , "RENTER","OWNER"),
+ ProductControllers.addBookingDate)
+
+ router.post('/add-viewed-product/:id', auth("ADMIN" , "RENTER","OWNER"), ProductControllers.addViewedProduct)
+
+
+  router.post('/add-query-product/:id', auth("ADMIN" , "RENTER","OWNER"), ProductControllers.addQueryProduct)
+
+
+export const productRoute=router;

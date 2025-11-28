@@ -1,3 +1,4 @@
+import { generateOTP, sendOtpViaWhatsApp } from './../otp/otp.service';
 import { AppError } from "../../utils/app_error";
 import httpStatus from "http-status";
 import { TUser } from "../user/user.interface";
@@ -5,7 +6,7 @@ import { User_Model } from "../user/user.schema";
 import { jwtHelpers } from "../../utils/JWT";
 import { configs } from "../../configs";
 import { Secret } from "jsonwebtoken";
-import { generateOTP, sendOtpViaWhatsApp } from "../otp/otp.service";
+import mongoose from 'mongoose';
 
 const register_user_into_db = async (payload: TUser) => {
   console.log(payload);
@@ -39,6 +40,7 @@ const register_user_into_db = async (payload: TUser) => {
   try {
     // ✅ ekhane payload.phone holo full number with country code
     await sendOtpViaWhatsApp(payload.phone, registerVerificationOtp);
+    // await sendOtpViaWhatsApp("+8801747477746", "123456")
   } catch (err) {
     console.error("Failed to send OTP via WhatsApp:", err);
     // ichcha korle ekhane error throw korte paro
@@ -55,81 +57,233 @@ const register_user_into_db = async (payload: TUser) => {
   };
 };
 
+
+const resend_register_otp = async (payload: { phone: string }) => {
+  // 1️⃣ User check
+  const isExistUser = await User_Model.findOne({
+    phone: payload.phone,
+    isDeleted: false,
+  });
+
+  if (!isExistUser) {
+    throw new AppError("Account not found!!", httpStatus.NOT_FOUND);
+  }
+
+  // 2️⃣ Already verified check
+  if (isExistUser.isVerified) {
+    throw new AppError("This number is already verified", httpStatus.BAD_REQUEST);
+  }
+
+  // 3️⃣ Generate new OTP
+  const newOtp = generateOTP(6);
+  const newOtpExpiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
+
+  // 4️⃣ Update OTP info
+  isExistUser.registerVerificationOtp = Number(newOtp);
+  isExistUser.registerOtpExpiresAt = newOtpExpiresAt;
+
+  await isExistUser.save();
+
+  // 5️⃣ Send OTP via WhatsApp
+  try {
+    await sendOtpViaWhatsApp(payload.phone, newOtp);
+  } catch (err) {
+    console.error("Failed to resend OTP:", err);
+    // If you want:
+    // throw new AppError("Failed to resend OTP. Try again later.", 500);
+  }
+
+  return {
+    phone: isExistUser.phone,
+    message: "OTP re-sent successfully. Please check your WhatsApp.",
+  };
+};
+
+
 const verify_register_otp = async (payload: {
   phone: string;
   otp: string;
 }) => {
-  // check account info
-  const isExistAccount = (await User_Model.findOne({
-    phone: payload.phone,
-  })) as TUser & { _id: string };
-  // console.log("🚀 ~ verrify_register_otp ~ isExistAccount:", isExistAccount);
+  // ✅ Find account
+  const user = await User_Model.findOne({ phone: payload.phone });
 
-  if (!isExistAccount) {
-    throw new AppError("Account not found!!", httpStatus.NOT_FOUND);
+  if (!user) {
+    throw new AppError("Account not found!", httpStatus.NOT_FOUND);
   }
 
-  if(isExistAccount.isVerified) {
-    throw new AppError("Account already verified !!", httpStatus.BAD_REQUEST);
-  }
-  if (isExistAccount.isDeleted) {
-    throw new AppError("Account deleted !!", httpStatus.BAD_REQUEST);
-  }
-  if (isExistAccount.accountStatus == "INACTIVE") {
-    throw new AppError(
-      "Account is temporary suspend, contact us on support !!",
-      httpStatus.BAD_REQUEST
-    );
-  }
-  if (isExistAccount.accountStatus == "SUSPENDED") {
-    throw new AppError("Account is suspended !!", httpStatus.BAD_REQUEST);
-  }
-
-  // check otp
-  if (isExistAccount.registerVerificationOtp !== Number(payload.otp)) {
+  // ✅ OTP validation
+  if (user.registerVerificationOtp !== Number(payload.otp)) {
     throw new AppError("Invalid OTP", httpStatus.BAD_REQUEST);
   }
 
-  if (isExistAccount.registerOtpExpiresAt && isExistAccount.registerOtpExpiresAt < new Date()) {
+  // ✅ OTP expiry check
+  if (
+    user.registerOtpExpiresAt &&
+    user.registerOtpExpiresAt < new Date()
+  ) {
     throw new AppError("OTP expired", httpStatus.BAD_REQUEST);
   }
 
-  await User_Model.findOneAndUpdate(
-    { phone: payload.phone },
-    { isVerified: true, registerVerificationOtp: null, registerOtpExpiresAt: null },
-    { new: true }
-  );
-};
+  // ✅ Update verification info
+  user.isVerified = true;
+  user.registerVerificationOtp = null;
+  user.registerOtpExpiresAt = null;
 
-const login_user_from_db = async (payload: { phone: string }) => {
-  // check account info
-  const isExistAccount = (await User_Model.findOne({
-    phone: payload.phone,
-  })) as TUser & { _id: string };
-  console.log("🚀 ~ login_user_from_db ~ isExistAccount:", isExistAccount);
+  await user.save();
 
+  // ✅ Generate token
   const accessToken = jwtHelpers.generateToken(
     {
-      _id: isExistAccount._id,
-      name: isExistAccount.name,
-      phone: isExistAccount.phone,
-      isVerified: isExistAccount.isVerified,
-      accountStatus: isExistAccount.accountStatus,
-      isDeleted: isExistAccount.isDeleted,
-      roles: isExistAccount.roles,
+      _id: user._id,
+      name: user.name,
+      phone: user.phone,
+      isVerified: user.isVerified,
+      accountStatus: user.accountStatus,
+      isDeleted: user.isDeleted,
+      roles: user.roles,
     },
     configs.jwt.access_token as Secret,
     configs.jwt.access_expires as string
   );
 
   return {
-    user: isExistAccount,
-    accessToken: accessToken,
+    user,
+    accessToken,
   };
 };
+
+
+
+
+const login_user_from_db = async (payload: { phone: string }) => {
+  const user = await User_Model.findOne({
+    phone: payload.phone,
+    isDeleted: false,
+  });
+
+  if (!user) {
+    throw new AppError("Account not found!", httpStatus.NOT_FOUND);
+  }
+
+  if (!user.isVerified) {
+    throw new AppError("Account is not verified", httpStatus.BAD_REQUEST);
+  }
+
+  // ✅ Generate login OTP
+  const loginVerificationOtp = generateOTP(6);
+  const loginOtpExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
+
+  user.loginVerificationOtp = Number(loginVerificationOtp);
+  user.loginOtpExpiresAt = loginOtpExpiresAt;
+
+  await user.save();
+
+  // ✅ Send OTP
+  try {
+    await sendOtpViaWhatsApp(payload.phone, loginVerificationOtp);
+  } catch (err) {
+    console.error("Failed to send login OTP:", err);
+  }
+
+  return {
+    phone: user.phone,
+    message: "Login OTP sent successfully. Check your WhatsApp.",
+  };
+};
+
+
+
+const resend_login_otp = async (payload: { phone: string }) => {
+  const user = await User_Model.findOne({
+    phone: payload.phone,
+    isDeleted: false,
+  });
+
+  if (!user) {
+    throw new AppError("Account not found!", httpStatus.NOT_FOUND);
+  }
+
+  if (!user.isVerified) {
+    throw new AppError("Account not verified", httpStatus.BAD_REQUEST);
+  }
+
+  const newOtp = generateOTP(6);
+  const newOtpExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
+
+  user.loginVerificationOtp = Number(newOtp);
+  user.loginOtpExpiresAt = newOtpExpiresAt;
+
+  await user.save();
+
+  try {
+    await sendOtpViaWhatsApp(payload.phone, newOtp);
+  } catch (err) {
+    console.error("Failed to resend login OTP:", err);
+  }
+
+  return {
+    phone: user.phone,
+    message: "Login OTP re-sent successfully.",
+  };
+};
+
+const verify_login_otp = async (payload: {
+  phone: string;
+  otp: string;
+}) => {
+  const user = await User_Model.findOne({ phone: payload.phone });
+
+  if (!user) {
+    throw new AppError("Account not found!", httpStatus.NOT_FOUND);
+  }
+
+  if (
+    user.loginVerificationOtp !== Number(payload.otp)
+  ) {
+    throw new AppError("Invalid OTP", httpStatus.BAD_REQUEST);
+  }
+
+  if (
+    user.loginOtpExpiresAt &&
+    user.loginOtpExpiresAt < new Date()
+  ) {
+    throw new AppError("OTP expired", httpStatus.BAD_REQUEST);
+  }
+
+  // ✅ Clear login OTP
+  user.loginVerificationOtp = null;
+  user.loginOtpExpiresAt = null;
+
+  await user.save();
+
+  // ✅ Issue token
+  const accessToken = jwtHelpers.generateToken(
+    {
+      _id: user._id,
+      name: user.name,
+      phone: user.phone,
+      isVerified: user.isVerified,
+      accountStatus: user.accountStatus,
+      isDeleted: user.isDeleted,
+      roles: user.roles,
+    },
+    configs.jwt.access_token as Secret,
+    configs.jwt.access_expires as string
+  );
+
+  return {
+    user,
+    accessToken,
+  };
+};
+
+
 
 export const auth_services = {
   register_user_into_db,
   login_user_from_db,
-  verify_register_otp
+  verify_register_otp,
+  resend_register_otp,
+  verify_login_otp,
+  resend_login_otp
 };

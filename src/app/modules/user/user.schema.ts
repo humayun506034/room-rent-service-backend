@@ -13,9 +13,6 @@ const user_schema = new Schema<TUser>(
       type: String,
       trim: true,
       lowercase: true,
-      // make unique but allow multiple docs without email
-      unique: true,
-      sparse: true,
       match: [
         // simple RFC5322-ish check; tweak as needed
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -23,7 +20,6 @@ const user_schema = new Schema<TUser>(
       ],
       required: false,
     },
-
     location: { type: String, trim: true, required: false },
 
     isVerified: { type: Boolean, default: true },
@@ -35,23 +31,30 @@ const user_schema = new Schema<TUser>(
       type: Date,
       default: null,
     },
+     loginVerificationOtp: {
+      type: Number,
+      default: null,
+    },
+    loginOtpExpiresAt: {
+      type: Date,
+      default: null,
+    },
     accountStatus: {
       type: String,
       enum: ["ACTIVE", "INACTIVE", "SUSPENDED"],
       default: "ACTIVE",
-      index: true,
     },
 
     // soft-delete flag
-    isDeleted: { type: Boolean, default: false, index: true },
+    isDeleted: { type: Boolean, default: false, },
     roles: {
       type: [String], // array of strings
-      enum: ["ADMIN", "RENTER"], // allowed values
+      enum: ["ADMIN", "RENTER","OWNER"], // allowed values
       required: true,
-      default: ["RENTER"], // optional
+      default: ["RENTER","OWNER"], // optional
     },
   },
   { timestamps: true, versionKey: false }
 );
 
-export const User_Model = model("user", user_schema);
+export const User_Model = model("User", user_schema);

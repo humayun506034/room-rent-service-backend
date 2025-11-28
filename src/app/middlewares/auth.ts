@@ -56,7 +56,7 @@ import { configs } from "../configs";
 import { User_Model } from "../modules/user/user.schema";
 
 const auth = (...allowedRoles: string[]): RequestHandler => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request & { loggedUser?: any }, res: Response, next: NextFunction) => {
     try {
       const token = req.headers.authorization;
 
@@ -70,8 +70,9 @@ const auth = (...allowedRoles: string[]): RequestHandler => {
       );
 
       req.user = verifiedUser as JwtPayloadType;
+      // console.log(verifiedUser)
       const isUserExist = await User_Model.findOne({
-        email: verifiedUser.email,
+        phone: verifiedUser.phone,
       }).lean();
 
       if (!isUserExist) {
@@ -106,6 +107,7 @@ const auth = (...allowedRoles: string[]): RequestHandler => {
           throw new AppError("You are not authorized for this action!", 403);
         }
       }
+      req.loggedUser = isUserExist
 
       next();
     } catch (err) {

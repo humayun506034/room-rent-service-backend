@@ -14,6 +14,17 @@ const register_user = catchAsync(async (req, res) => {
     })
 })
 
+
+const resend_register_otp = catchAsync(async (req, res) => {
+    const result = await auth_services.resend_register_otp(req?.body)
+    manageResponse(res, {
+        success: true,
+        message: "Opt resend successful",
+        statusCode: httpStatus.OK,
+        data: result
+    })
+})
+
 const verify_register_otp = catchAsync(async (req, res) => {
     const result = await auth_services.verify_register_otp(req?.body)
     manageResponse(res, {
@@ -23,6 +34,8 @@ const verify_register_otp = catchAsync(async (req, res) => {
         data: result
     })
 })
+
+
 
 const login_user = catchAsync(async (req, res) => {
     const result = await auth_services.login_user_from_db(req.body);
@@ -39,9 +52,32 @@ const login_user = catchAsync(async (req, res) => {
 });
 
 
+const resend_login_otp = catchAsync(async (req, res) => {
+    const result = await auth_services.resend_login_otp(req?.body)
+    manageResponse(res, {
+        success: true,
+        message: "Opt resend successful",
+        statusCode: httpStatus.OK,
+        data: result
+    })
+})
+
+const verify_login_otp = catchAsync(async (req, res) => {
+    const result = await auth_services.verify_login_otp(req?.body)
+    manageResponse(res, {
+        success: true,
+        message: "Login successful",
+        statusCode: httpStatus.OK,
+        data: result
+    })
+})
+
 export const auth_controllers = {
     register_user,
     verify_register_otp,
     login_user,
+    resend_register_otp,
+    resend_login_otp,
+    verify_login_otp
   
 }

@@ -1,20 +1,19 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { user_controllers } from "./user.controller";
-import uploader from "../../middlewares/uploader";
-import { user_validations } from "./user.validation";
 import auth from "../../middlewares/auth";
+import { upload } from "../../middlewares/upload";
 
-const userRoute = Router()
+const router = Router()
 
-userRoute.patch(
+
+router.get('/get-myself-profile', auth("ADMIN","USER","RENTER"), user_controllers.getMyProfileInfo)
+
+router.patch(
     "/update-profile",
-    auth("ADMIN","USER"),
-    uploader.single("image"),
-    (req: Request, res: Response, next: NextFunction) => {
-        req.body = user_validations.update_user.parse(JSON.parse(req?.body?.data))
-        user_controllers.update_profile(req, res, next)
-    },
+    auth("ADMIN" , "RENTER","OWNER"),
+    upload.single("image"),
+   user_controllers.update_profile
 )
 
 
-export default userRoute;
+export const userRoute= router;
