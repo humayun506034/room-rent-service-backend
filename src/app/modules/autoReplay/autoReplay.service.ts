@@ -163,6 +163,16 @@ export const autoReplyHandler = async (msg: any) => {
 
       if (apt._id) replyText += `\n🆔 ID: ${apt._id}\n`;
       replyText += `------------------------------------\n\n`;
+
+      let finalLink = "";
+
+    if (apt.listing_type === "Normal Apartment") {
+   finalLink = `https://yannyamba/apartment/${apt._id}`;
+    } else if (apt.listing_type === "Furnished Apartment") {
+  finalLink = `https://yannyamba/furnished/${apt._id}`;
+    }
+
+    replyText += `🔗 View Details: ${finalLink}\n`;
     }
 
     return msg.reply(replyText);
