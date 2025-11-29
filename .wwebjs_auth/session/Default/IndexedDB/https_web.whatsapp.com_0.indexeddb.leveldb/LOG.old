@@ -1,13 +1,13 @@
-2025/11/29-10:21:02.872 2e67 Reusing MANIFEST /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2025/11/29-10:21:02.872 2e67 Recovering log #130
-2025/11/29-10:21:02.884 2e67 Reusing old log /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/000130.log 
-2025/11/29-10:21:04.038 2e90 Level-0 table #135: started
-2025/11/29-10:21:04.042 2e90 Level-0 table #135: 167793 bytes OK
-2025/11/29-10:21:04.044 2e90 Delete type=0 #130
-2025/11/29-10:21:04.045 2e67 Manual compaction at level-0 from '\x000\x00\x00\x00' @ 72057594037927935 : 1 .. '\x001\x00\x00\x00' @ 0 : 0; will stop at (end)
-2025/11/29-10:21:06.037 2e65 Compacting 1@1 + 1@2 files
-2025/11/29-10:21:06.084 2e65 Generated table #136@1: 42864 keys, 1694347 bytes
-2025/11/29-10:21:06.084 2e65 Compacted 1@1 + 1@2 files => 1694347 bytes
-2025/11/29-10:21:06.086 2e65 compacted to: files[ 0 0 1 0 0 0 0 ]
-2025/11/29-10:21:06.086 2e65 Delete type=2 #135
-2025/11/29-10:21:06.086 2e65 Delete type=2 #132
+2025/11/29-12:11:04.790 28f2 Reusing MANIFEST /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/11/29-12:11:04.790 28f2 Recovering log #154
+2025/11/29-12:11:04.812 28f2 Reusing old log /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/000154.log 
+2025/11/29-12:11:07.606 28f5 Level-0 table #159: started
+2025/11/29-12:11:07.614 28f5 Level-0 table #159: 454238 bytes OK
+2025/11/29-12:11:07.616 28f5 Delete type=0 #154
+2025/11/29-12:11:07.616 28f5 Manual compaction at level-0 from '\x006\x00\x00\x00' @ 72057594037927935 : 1 .. '\x007\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/11/29-12:11:09.630 291d Compacting 1@1 + 1@2 files
+2025/11/29-12:11:09.695 291d Generated table #160@1: 50900 keys, 2064297 bytes
+2025/11/29-12:11:09.696 291d Compacted 1@1 + 1@2 files => 2064297 bytes
+2025/11/29-12:11:09.698 291d compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/11/29-12:11:09.698 291d Delete type=2 #159
+2025/11/29-12:11:09.698 291d Delete type=2 #156

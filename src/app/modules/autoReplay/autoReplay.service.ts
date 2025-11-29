@@ -1,34 +1,7 @@
 // autoReply.js
 
 import axios from 'axios'
-// export const autoReplyHandler = async (msg:any) => {
-//   const number = msg.from;
-//   const text = msg.body.trim().toLowerCase();
-
-// try {
-//     const response = await axios.post(
-//       "http://172.83.14.141:8010/api/v1/api/v1/chat",
-//       {
-//         message: text,
-//         user_id: number
-//       },
-//       {
-//         headers: {
-//           accept: "application/json",
-//           "Content-Type": "application/json"
-//         }
-//       }
-//     );
-
-//       return msg.reply(response.data);
-
-
-//     // console.log();
-//   } catch (error) {
-//    console.log(error)
-//   }
-
-// };
+import { ProductService } from '../products/product.service';
 
 
 
@@ -77,3 +50,39 @@ export const autoReplyHandler = async (msg: any) => {
     return msg.reply("❗ Something went wrong. Please try again later.");
   }
 };
+
+
+// export const autoReplyHandler = async (msg: any) => {
+//   const number = msg.from;
+//   const text = msg.body.trim().toLowerCase();
+
+//   try {
+//     const response = await axios.post("http://172.83.14.141:8010/api/v1/api/v1/chat", {
+//       message: text,
+//       user_id: number
+//     });
+
+//     const data = response.data;
+
+//     const apartmentsFromApi = data.apartment_ids; 
+//     const allDetails: any[] = [];
+
+//     for (const id of apartmentsFromApi) {
+//       const apartment = await ProductService.getSingleProduct(id);
+//       if (apartment) {
+//         allDetails.push(apartment); // 👈 এখানে সব ডেটা জমতেছে
+//       }
+//     }
+
+//     console.log("Final Apartments Detail:", allDetails);
+
+//     // এখন তুমি allDetails থেকে নিজে replyText বানাবে
+//     // আমি কিছু যোগ করলাম না কারণ তুমি বলেছো পরে নিজে modify করবে
+
+//     return msg.reply("Apartments fetched successfully.");
+
+//   } catch (error: any) {
+//     console.error(error);
+//     return msg.reply("❗ Something went wrong.");
+//   }
+// };
