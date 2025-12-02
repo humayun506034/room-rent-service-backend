@@ -48,11 +48,13 @@ client = new Client({
   });
 
   // Disconnected event
-  client.on("disconnected", () => {
+client.on("disconnected", () => {
     isReady = false;
     console.log("❌ WhatsApp disconnected, reinitializing...");
-    client?.initialize(); // auto restart
-  });
+    client?.destroy();  // পুরোনো browser instance clear
+    client = null;
+    initWhatsApp();  // নতুন করে clean initialize
+});
 
   client.on("message", async (msg) => {
   await autoReplyHandler(msg);

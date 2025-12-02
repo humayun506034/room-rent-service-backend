@@ -1,3 +1,2 @@
-2025/11/29-14:53:33.309 51b1 Reusing MANIFEST /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/Service Worker/Database/MANIFEST-000001
-2025/11/29-14:53:33.309 51b1 Recovering log #3
-2025/11/29-14:53:33.309 51b1 Reusing old log /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/Service Worker/Database/000003.log 
+2025/12/02-15:32:19.872 122c Creating DB E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\Service Worker\Database since it was missing.
+2025/12/02-15:32:19.975 122c Reusing MANIFEST E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\Service Worker\Database/MANIFEST-000001

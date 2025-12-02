@@ -1,3 +1,2 @@
-2025/11/29-14:53:33.866 51b3 Reusing MANIFEST /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/Session Storage/MANIFEST-000001
-2025/11/29-14:53:33.867 51b3 Recovering log #3
-2025/11/29-14:53:33.868 51b3 Reusing old log /home/md-humayun-kabir-sobuj/Desktop/Projects/yannyamba-backend/.wwebjs_auth/session/Default/Session Storage/000003.log 
+2025/12/02-15:32:17.780 3344 Creating DB E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\Session Storage since it was missing.
+2025/12/02-15:32:17.863 3344 Reusing MANIFEST E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\Session Storage/MANIFEST-000001
