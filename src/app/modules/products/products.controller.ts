@@ -5,14 +5,15 @@ import { ProductService } from "./product.service";
 import { uploadImageToSupabase } from "../../utils/uploadImageToSupabase";
 import { Request } from "express";
 
-const addProduct = catchAsync(async (req:Request & { loggedUser?: any}, res) => {
-  // console.log(req.body.data);
-  // console.log(req.files);
-  console.log(req.loggedUser._id)
+const addProduct = catchAsync(
+  async (req: Request & { loggedUser?: any }, res) => {
+    // console.log(req.body.data);
+    // console.log(req.files);
+    console.log(req.loggedUser._id);
 
-  const images=[]
+    const images = [];
 
-  const files = req.files as Express.Multer.File[];
+    const files = req.files as Express.Multer.File[];
     if (!files || files.length === 0) {
       return res.status(400).json({
         success: false,
@@ -26,37 +27,40 @@ const addProduct = catchAsync(async (req:Request & { loggedUser?: any}, res) => 
 
       // console.log({uploadedUrl})
 
-      images.push({link: uploadedUrl})
-     
+      images.push({ link: uploadedUrl });
     }
-
 
     // console.log({images})
 
-    
+    const productData = JSON.parse(req.body.data);
+    // console.log({productData})
 
+    const payload = {
+      ...productData,
+      images,
+      authorId: req.loggedUser._id,
+    };
 
-  const productData = JSON.parse(req.body.data);
-  // console.log({productData})
+    // console.log(payload)
 
+    const result = await ProductService.addProduct(payload);
 
-  const payload ={
-    ...productData,
-    images,
-    authorId: req.loggedUser._id
+    if (result.isApproved === true) {
+      manageResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Product Added Successfully",
+        data: result,
+      });
+    } else {
+      manageResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Product Added Successfully wait for admin approval",
+      });
+    }
   }
-
-  // console.log(payload)
-  
-  const result = await ProductService.addProduct(payload);
-  manageResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "Product Added Successfully",
-    data: result,
-  });
-});
-
+);
 
 const getAllProduct = catchAsync(async (req, res) => {
   const {
@@ -83,14 +87,14 @@ const getAllProduct = catchAsync(async (req, res) => {
   if (neighborhoods) {
     filter.neighborhoods = Array.isArray(neighborhoods)
       ? neighborhoods
-      : neighborhoods.split(","); 
+      : neighborhoods.split(",");
   }
 
   if (bedrooms) filter.bedrooms = Number(bedrooms);
   if (bathrooms) filter.bathrooms = Number(bathrooms);
   if (advance_payment) filter.advance_payment = advance_payment;
   if (security_deposit) filter.security_deposit = security_deposit;
-  if(listing_type) filter.listing_type = listing_type
+  if (listing_type) filter.listing_type = listing_type;
   const result = await ProductService.getAllProduct(filter);
 
   manageResponse(res, {
@@ -101,9 +105,8 @@ const getAllProduct = catchAsync(async (req, res) => {
   });
 });
 
-
 const getSingleProduct = catchAsync(async (req, res) => {
-  console.log(req.params.id)
+  console.log(req.params.id);
   const result = await ProductService.getSingleProduct(req.params.id);
   manageResponse(res, {
     success: true,
@@ -114,7 +117,10 @@ const getSingleProduct = catchAsync(async (req, res) => {
 });
 
 const addBookingDate = catchAsync(async (req, res) => {
-  const result = await ProductService.addBookingDate(req.params.id, req.body.date);
+  const result = await ProductService.addBookingDate(
+    req.params.id,
+    req.body.date
+  );
   manageResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -123,106 +129,172 @@ const addBookingDate = catchAsync(async (req, res) => {
   });
 });
 
-const getMySelfProduct = catchAsync(async (req:Request & { loggedUser?: any}, res) => {
-  const {
-    property_category,
-    listing_type,
-    price_min,
-    price_max,
-    city,
-    neighborhoods,
-    bedrooms,
-    bathrooms,
-    advance_payment,
-    security_deposit,
-  } = req.query as any;
+const getMySelfProduct = catchAsync(
+  async (req: Request & { loggedUser?: any }, res) => {
+    const {
+      property_category,
+      listing_type,
+      price_min,
+      price_max,
+      city,
+      neighborhoods,
+      bedrooms,
+      bathrooms,
+      advance_payment,
+      security_deposit,
+    } = req.query as any;
 
-  const filter: any = {};
+    const filter: any = {};
 
-  if (property_category) filter.property_category = property_category;
-  if (price_min && price_max) {
-    filter.price_renger = [Number(price_min), Number(price_max)];
+    if (property_category) filter.property_category = property_category;
+    if (price_min && price_max) {
+      filter.price_renger = [Number(price_min), Number(price_max)];
+    }
+    if (city) filter.city = city;
+
+    if (neighborhoods) {
+      filter.neighborhoods = Array.isArray(neighborhoods)
+        ? neighborhoods
+        : neighborhoods.split(",");
+    }
+
+    if (bedrooms) filter.bedrooms = Number(bedrooms);
+    if (bathrooms) filter.bathrooms = Number(bathrooms);
+    if (advance_payment) filter.advance_payment = advance_payment;
+    if (security_deposit) filter.security_deposit = security_deposit;
+    if (listing_type) filter.listing_type = listing_type;
+    const result = await ProductService.getMySelfProduct(
+      filter,
+      req.loggedUser._id
+    );
+    manageResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Product fetched Successfully",
+      data: result,
+    });
   }
-  if (city) filter.city = city;
+);
 
-  if (neighborhoods) {
-    filter.neighborhoods = Array.isArray(neighborhoods)
-      ? neighborhoods
-      : neighborhoods.split(","); 
+const addViewedProduct = catchAsync(
+  async (req: Request & { loggedUser?: any }, res) => {
+    const result = await ProductService.addViewedProduct(
+      req.params.id,
+      req.loggedUser._id
+    );
+    manageResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Product viewed Successfully",
+      data: result,
+    });
   }
+);
 
-  if (bedrooms) filter.bedrooms = Number(bedrooms);
-  if (bathrooms) filter.bathrooms = Number(bathrooms);
-  if (advance_payment) filter.advance_payment = advance_payment;
-  if (security_deposit) filter.security_deposit = security_deposit;
-  if(listing_type) filter.listing_type = listing_type
-  const result = await ProductService.getMySelfProduct(filter, req.loggedUser._id);  manageResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "Product fetched Successfully",
-    data: result,
-  });
-});
+const addQueryProduct = catchAsync(
+  async (req: Request & { loggedUser?: any }, res) => {
+    const result = await ProductService.addQueryProduct(
+      req.params.id,
+      req.loggedUser._id
+    );
+    manageResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Product queried Successfully",
+      data: result,
+    });
+  }
+);
 
-const addViewedProduct = catchAsync(async (req:Request & { loggedUser?: any}, res) => {
-  const result = await ProductService.addViewedProduct(req.params.id, req.loggedUser._id);
-  manageResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "Product viewed Successfully",
-    data: result,
-  });
-});
+const getStack = catchAsync(
+  async (req: Request & { loggedUser?: any }, res) => {
+    const result = await ProductService.getStack(req.loggedUser._id);
+    manageResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Stack get Successfully",
+      data: result,
+    });
+  }
+);
 
-const addQueryProduct = catchAsync(async (req:Request & { loggedUser?: any}, res) => {
-  const result = await ProductService.addQueryProduct(req.params.id, req.loggedUser._id);
-  manageResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "Product queried Successfully",
-    data: result,
-  });
-});
+const addFevouriteApartment = catchAsync(
+  async (req: Request & { loggedUser?: any }, res) => {
+    const result = await ProductService.addFevouriteApartment(
+      req.loggedUser._id,
+      req.body.apartmentId
+    );
+    manageResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Product fevourite Successfully",
+      data: result,
+    });
+  }
+);
 
-const getStack = catchAsync(async (req:Request & { loggedUser?: any}, res) => {
-  const result = await ProductService.getStack(req.loggedUser._id);
-  manageResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "Stack get Successfully",
-    data: result,
-  });
-});
+const myselfFevouriteApartment = catchAsync(
+  async (req: Request & { loggedUser?: any }, res) => {
+    const result = await ProductService.myselfFevouriteApartment(
+      req.loggedUser._id
+    );
+    manageResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: " fevourites apartment get Successfully",
+      data: result,
+    });
+  }
+);
 
-const addFevouriteApartment= catchAsync(async (req:Request & { loggedUser?: any}, res) => {
-  const result = await ProductService.addFevouriteApartment(req.loggedUser._id,req.body.apartmentId );
-  manageResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "Product fevourite Successfully",
-    data: result,
-  });
-});
+const deleteFevouriteApartment = catchAsync(
+  async (req: Request & { loggedUser?: any }, res) => {
+    const result = await ProductService.deleteFevouriteApartment(
+      req.loggedUser._id,
+      req.body.apartmentId
+    );
+    manageResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Deleted Successfully",
+      data: result,
+    });
+  }
+);
 
-const myselfFevouriteApartment = catchAsync(async (req:Request & { loggedUser?: any}, res) => {
-  const result = await ProductService.myselfFevouriteApartment(req.loggedUser._id);
-  manageResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: " fevourites apartment get Successfully",
-    data: result,
-  });
-})
+const getAllNotPublishedProduct = catchAsync(
+  async (req: Request & { loggedUser?: any }, res) => {
+    const page = req.query.page ? Number(req.query.page) : 1;
+    const limit = req.query.limit ? Number(req.query.limit) : 10;
 
-const deleteFevouriteApartment = catchAsync(async (req:Request & { loggedUser?: any}, res) => {
-  const result = await ProductService.deleteFevouriteApartment(req.loggedUser._id,req.body.apartmentId );
-  manageResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "Deleted Successfully",
-    data: result,
-  });
-})
+    const result = await ProductService.getAllNotPublishedProduct(
+      page,
+      limit
+    );
+
+    manageResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Product fetched Successfully",
+      meta: result.meta,
+      data: result.data,
+    });
+  }
+);
+
+
+const makeProductPublished =catchAsync(
+  async (req: Request & { loggedUser?: any }, res) => {
+    const result = await ProductService.makeProductPublished(req.params._id);
+    manageResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Product approved Successfully",
+      data: result,
+    });
+  }
+)
+
 
 export const ProductControllers = {
   addProduct,
@@ -235,5 +307,7 @@ export const ProductControllers = {
   getStack,
   addFevouriteApartment,
   myselfFevouriteApartment,
-  deleteFevouriteApartment
+  deleteFevouriteApartment,
+  getAllNotPublishedProduct,
+  makeProductPublished
 };

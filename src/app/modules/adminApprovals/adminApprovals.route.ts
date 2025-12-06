@@ -5,6 +5,7 @@ import { adminApprovals_controllers } from "./adminApprovals.controller";
 
 const router = Router()
 
-router.get('/need-admin-approval-status', auth("ADMIN, OWNER, RENTER"), adminApprovals_controllers.isNeedApartmentAdminApprovedStatus)
+router.get('/need-admin-approval-status', auth("ADMIN"), adminApprovals_controllers.isNeedApartmentAdminApprovedStatus)
+router.patch('/need-admin-approval-status', auth("ADMIN"), adminApprovals_controllers.changeIsNeedApartmentAdminApprovedStatus)
 
 export const adminApprovalRoutes= router;
