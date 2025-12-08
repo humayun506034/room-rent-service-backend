@@ -44,7 +44,7 @@ const getAllProduct = async (filter?: {
   const isNormalApartmentShowStatus =
     isApartmentAdminApprovalStatus?.isNormalApartmentShow;
 
-  console.log(isNormalApartmentShowStatus);
+  // console.log(isNormalApartmentShowStatus);
 
   const query: any = {};
 
