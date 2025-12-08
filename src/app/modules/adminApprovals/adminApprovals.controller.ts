@@ -11,7 +11,7 @@ const isNeedApartmentAdminApprovedStatus = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     message: "Need Apartment Admin Approved Status fetched Successfully",
     data: {
-      isNeedApartmentAdminApproved
+      isNeedApartmentAdminApproved,
     },
   });
 });
@@ -31,7 +31,35 @@ const changeIsNeedApartmentAdminApprovedStatus = catchAsync(
   }
 );
 
+const isNormalApartmentShowStatus = catchAsync(async (req, res) => {
+  const { isNormalApartmentShow } =
+    (await adminApprovals_services.isNormalApartmentShowStatus()) as any;
+  manageResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Normal Apartment Show Status fetched Successfully",
+    data: {
+      isNormalApartmentShow,
+    },
+  });
+});
+
+const changeIsNormalApartmentShowStatus = catchAsync(async (req, res) => {
+  const { isNormalApartmentShow } =
+    (await adminApprovals_services.changeIsNormalApartmentShowStatus()) as any;
+  manageResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Normal Apartment Show Status changed Successfully",
+    data: {
+      isNormalApartmentShow,
+    },
+  });
+});
+
 export const adminApprovals_controllers = {
   isNeedApartmentAdminApprovedStatus,
   changeIsNeedApartmentAdminApprovedStatus,
+  isNormalApartmentShowStatus,
+  changeIsNormalApartmentShowStatus,
 };

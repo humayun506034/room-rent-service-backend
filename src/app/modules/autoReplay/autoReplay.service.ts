@@ -178,7 +178,7 @@ export const autoReplyHandler = async (msg: any) => {
     return msg.reply(replyText);
 
   } catch (error: any) {
-    console.error("AutoReply error:", error?.response?.data || error);
-    return msg.reply("❗ Something went wrong. Please try again later.");
+    // console.error("AutoReply error:", error?.response?.data || error);
+    // return msg.reply("❗ Something went wrong. Please try again later.");
   }
 };

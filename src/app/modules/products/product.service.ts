@@ -12,7 +12,7 @@ const addProduct = async (data: TApartment) => {
   // console.log();
 
   const isNeedApprovedStatus =
-    !isNeedApartmentAdminApprovedStatus?.isNeedApartmentAdminApproved;
+    isNeedApartmentAdminApprovedStatus?.isNeedApartmentAdminApproved;
 
   const productData = {
     ...data,
@@ -34,7 +34,18 @@ const getAllProduct = async (filter?: {
   advance_payment?: string;
   security_deposit?: string;
 }) => {
-  console.log(filter);
+  // console.log(filter);
+
+  const isApartmentAdminApprovalStatus = await AdminApprovals.findOne(
+    {}
+  ).lean();
+  // console.log();
+
+  const isNormalApartmentShowStatus =
+    isApartmentAdminApprovalStatus?.isNormalApartmentShow;
+
+  console.log(isNormalApartmentShowStatus);
+
   const query: any = {};
 
   if (filter?.property_category) {
@@ -71,6 +82,9 @@ const getAllProduct = async (filter?: {
 
   if (filter?.security_deposit) {
     query.security_deposit = filter.security_deposit;
+  }
+  if (isNormalApartmentShowStatus === false) {
+    query.listing_type = { $ne: "Normal Apartment" };
   }
 
   const result = await Apartment.find(query);
@@ -271,7 +285,6 @@ const getAllNotPublishedProduct = async (page = 1, limit = 10) => {
   const total = await Apartment.countDocuments({ isApproved: false });
 
   return {
-    
     data,
     meta: {
       page,
@@ -281,7 +294,6 @@ const getAllNotPublishedProduct = async (page = 1, limit = 10) => {
     },
   };
 };
-
 
 const makeProductPublished = async (_id: string) => {
   const findProduct = await Apartment.findOne({

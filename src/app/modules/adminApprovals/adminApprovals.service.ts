@@ -25,8 +25,35 @@ const changeIsNeedApartmentAdminApprovedStatus = async () => {
 
   return result
 };
+const isNormalApartmentShowStatus = async () => {
+    const result = AdminApprovals.findOne({}).lean().select("isNormalApartmentShow")
+    // console.log(result)
+    return result
+}
+
+
+const changeIsNormalApartmentShowStatus = async () => {
+  const current = await AdminApprovals.findOne({}).select(
+    "isNormalApartmentShow"
+  );
+
+  if (!current) {
+    throw new Error("Normal Apartment Show settings not found");
+  }
+
+ 
+  const result = await AdminApprovals.findOneAndUpdate(
+      {_id:current._id},
+      { isNormalApartmentShow: !current.isNormalApartmentShow },
+      { new: true }
+  ).select("isNormalApartmentShow")
+
+  return result
+};
 
 export const adminApprovals_services = {
     isNeedApartmentAdminApprovedStatus,
-    changeIsNeedApartmentAdminApprovedStatus
+    changeIsNeedApartmentAdminApprovedStatus,
+    isNormalApartmentShowStatus,
+    changeIsNormalApartmentShowStatus
 }
