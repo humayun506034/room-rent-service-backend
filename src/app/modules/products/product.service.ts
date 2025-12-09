@@ -12,7 +12,7 @@ const addProduct = async (data: TApartment) => {
   // console.log();
 
   const isNeedApprovedStatus =
-    isNeedApartmentAdminApprovedStatus?.isNeedApartmentAdminApproved;
+    !isNeedApartmentAdminApprovedStatus?.isNeedApartmentAdminApproved;
 
   const productData = {
     ...data,

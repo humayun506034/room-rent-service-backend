@@ -44,7 +44,7 @@ const addProduct = catchAsync(
     // console.log(payload)
 
     const result = await ProductService.addProduct(payload);
-
+    // console.log(result);
     if (result.isApproved === true) {
       manageResponse(res, {
         success: true,
@@ -267,10 +267,7 @@ const getAllNotPublishedProduct = catchAsync(
     const page = req.query.page ? Number(req.query.page) : 1;
     const limit = req.query.limit ? Number(req.query.limit) : 10;
 
-    const result = await ProductService.getAllNotPublishedProduct(
-      page,
-      limit
-    );
+    const result = await ProductService.getAllNotPublishedProduct(page, limit);
 
     manageResponse(res, {
       success: true,
@@ -282,8 +279,7 @@ const getAllNotPublishedProduct = catchAsync(
   }
 );
 
-
-const makeProductPublished =catchAsync(
+const makeProductPublished = catchAsync(
   async (req: Request & { loggedUser?: any }, res) => {
     const result = await ProductService.makeProductPublished(req.params._id);
     manageResponse(res, {
@@ -293,8 +289,7 @@ const makeProductPublished =catchAsync(
       data: result,
     });
   }
-)
-
+);
 
 export const ProductControllers = {
   addProduct,
@@ -309,5 +304,5 @@ export const ProductControllers = {
   myselfFevouriteApartment,
   deleteFevouriteApartment,
   getAllNotPublishedProduct,
-  makeProductPublished
+  makeProductPublished,
 };
