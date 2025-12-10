@@ -6,6 +6,8 @@ import { User_Model } from "../user/user.schema";
 import { AdminApprovals } from "../adminApprovals/adminApprovals.model";
 
 const addProduct = async (data: TApartment) => {
+
+  // console.log({data})
   const isNeedApartmentAdminApprovedStatus = await AdminApprovals.findOne(
     {}
   ).lean();

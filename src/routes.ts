@@ -5,6 +5,8 @@ import { productRoute } from "./app/modules/products/products.route";
 import { adminApprovalRoutes } from "./app/modules/adminApprovals/adminApprovals.route";
 import propertyFeatureRoute from "./app/modules/propertyFeatures/propertyFeature.route";
 import buildingAmenitiesRoute from "./app/modules/buildingAmenities/buildingAmenities.route";
+import houseRulesRoute from "./app/modules/houseRules/houseRules.route";
+import whatsIncludeRoute from "./app/modules/whatsIncluded/whatsInclude.route";
 
 const appRouter = Router();
 
@@ -26,6 +28,14 @@ const moduleRoutes = [
   {
     path: "/building-amenities",
     route: buildingAmenitiesRoute,
+  },
+  {
+    path: "/house-rules",
+    route: houseRulesRoute,
+  },
+  {
+    path: "/whats-include",
+    route: whatsIncludeRoute,
   },
 ];
 
