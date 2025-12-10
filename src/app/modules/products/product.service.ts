@@ -87,6 +87,8 @@ const getAllProduct = async (filter?: {
     query.listing_type = { $ne: "Normal Apartment" };
   }
 
+  query.isApproved = true;
+
   const result = await Apartment.find(query);
   return result;
 };
