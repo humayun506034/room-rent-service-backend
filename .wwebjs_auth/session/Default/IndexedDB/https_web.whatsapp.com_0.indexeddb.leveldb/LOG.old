@@ -1,13 +1,4 @@
-2025/12/10-17:12:47.150 4030 Reusing MANIFEST E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2025/12/10-17:12:47.150 4030 Recovering log #212
-2025/12/10-17:12:47.168 4030 Reusing old log E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000212.log 
-2025/12/10-17:12:52.476 3eac Level-0 table #217: started
-2025/12/10-17:12:52.538 3eac Level-0 table #217: 138719 bytes OK
-2025/12/10-17:12:52.557 3eac Delete type=0 #212
-2025/12/10-17:12:52.558 3eac Manual compaction at level-0 from '\x00M\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00N\x00\x00\x00' @ 0 : 0; will stop at (end)
-2025/12/10-17:12:52.766 16d8 Compacting 1@1 + 1@2 files
-2025/12/10-17:12:53.573 16d8 Generated table #218@1: 47700 keys, 1803471 bytes
-2025/12/10-17:12:53.573 16d8 Compacted 1@1 + 1@2 files => 1803471 bytes
-2025/12/10-17:12:53.616 16d8 compacted to: files[ 0 0 1 0 0 0 0 ]
-2025/12/10-17:12:53.617 16d8 Delete type=2 #214
-2025/12/10-17:12:53.617 16d8 Delete type=2 #217
+2025/12/10-17:24:41.802 3a48 Reusing MANIFEST E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/12/10-17:24:41.802 3a48 Recovering log #216
+2025/12/10-17:24:41.841 3a48 Reusing old log E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000216.log 
+2025/12/10-17:24:46.761 41ec Manual compaction at level-0 from '\x00N\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00O\x00\x00\x00' @ 0 : 0; will stop at (end)

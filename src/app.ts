@@ -10,7 +10,7 @@ const app = express()
 
 // middleware
 app.use(cors({
-    origin: ["http://localhost:3000","*"]
+    origin: ["http://localhost:3000","https://yannyamba-sd.vercel.app","*"]
 }))
 
 app.use(express.json({ limit: "5000mb" })); // increase JSON body limit
