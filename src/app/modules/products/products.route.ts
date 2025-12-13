@@ -3,6 +3,7 @@ import { Router } from "express";
 import auth from "../../middlewares/auth";
 import { ProductControllers } from "./products.controller";
 import { upload } from "../../middlewares/upload";
+import { adminApprovals_controllers } from "../adminApprovals/adminApprovals.controller";
 
 const router = Router();
 
@@ -12,6 +13,11 @@ router.get(
   "/get-myself-product",
   auth("ADMIN", "RENTER", "OWNER"),
   ProductControllers.getMySelfProduct
+);
+
+router.get(
+  "/show-normal-apartment",
+  adminApprovals_controllers.isNormalApartmentShowStatus
 );
 router.get(
   "/get-all-not-published-product",
@@ -58,7 +64,11 @@ router.post(
   ProductControllers.addFevouriteApartment
 );
 
-router.patch('/make-product-approved/:_id',auth("ADMIN"), ProductControllers.makeProductPublished)
+router.patch(
+  "/make-product-approved/:_id",
+  auth("ADMIN"),
+  ProductControllers.makeProductPublished
+);
 
 router.delete(
   "/delete-fevourite-apartment",
