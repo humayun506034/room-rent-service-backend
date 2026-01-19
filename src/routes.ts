@@ -7,6 +7,8 @@ import propertyFeatureRoute from "./app/modules/propertyFeatures/propertyFeature
 import buildingAmenitiesRoute from "./app/modules/buildingAmenities/buildingAmenities.route";
 import houseRulesRoute from "./app/modules/houseRules/houseRules.route";
 import whatsIncludeRoute from "./app/modules/whatsIncluded/whatsInclude.route";
+import cityRoute from "./app/modules/city/city.route";
+import neiborhoodRoute from "./app/modules/neiborhood/neiborhood.route";
 
 const appRouter = Router();
 
@@ -36,6 +38,14 @@ const moduleRoutes = [
   {
     path: "/whats-include",
     route: whatsIncludeRoute,
+  },
+  {
+    path: "/city",
+    route: cityRoute,
+  },
+  {
+    path: "/neiborhood",
+    route: neiborhoodRoute,
   },
 ];
 
