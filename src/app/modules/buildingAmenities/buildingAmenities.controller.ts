@@ -25,7 +25,7 @@ const addBuildingAmenities = catchAsync(async (req, res) => {
 
 const deleteBuildingAmenities = catchAsync(async (req, res) => {
   const result = await BuildingAmenitiesService.deleteBuildingAmenities(
-    req.params.id
+    req.params.id as string
   );
   manageResponse(res, {
     success: true,

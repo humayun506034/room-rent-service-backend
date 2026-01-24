@@ -24,7 +24,7 @@ const addCity = catchAsync(async (req, res) => {
 });
 
 const deleteCity = catchAsync(async (req, res) => {
-  const result = await CityService.deleteCity(req.params.id);
+  const result = await CityService.deleteCity(req.params.id as string);
   manageResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

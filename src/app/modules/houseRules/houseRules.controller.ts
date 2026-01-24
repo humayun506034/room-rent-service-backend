@@ -25,7 +25,7 @@ const addHouseRules = catchAsync(async (req, res) => {
 
 const deleteHouseRules = catchAsync(async (req, res) => {
   const result = await HouseRulesService.deleteHourseRules(
-    req.params.id
+    req.params.id as string
   );
   manageResponse(res, {
     success: true,

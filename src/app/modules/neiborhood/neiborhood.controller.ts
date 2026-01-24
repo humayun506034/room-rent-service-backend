@@ -24,7 +24,7 @@ const addNeiborhood = catchAsync(async (req, res) => {
 });
 
 const deleteNeiborhood = catchAsync(async (req, res) => {
-  const result = await NeiborhoodService.deleteNeiborhood(req.params.id);
+  const result = await NeiborhoodService.deleteNeiborhood(req.params.id as string);
   manageResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

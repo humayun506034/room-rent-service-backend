@@ -24,7 +24,7 @@ const addPropertyFeature = catchAsync(async (req, res) => {
 });
 
 const deletePropertyFeature = catchAsync(async (req, res) => {
-    const result = await propertyFeatureService.deletePropertyFeature(req.params.id);
+    const result = await propertyFeatureService.deletePropertyFeature(req.params.id as string);
     manageResponse(res, {
         success: true,
         statusCode: httpStatus.OK,

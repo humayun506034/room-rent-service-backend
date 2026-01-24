@@ -26,7 +26,7 @@ const addWhatsInclude = catchAsync(async (req, res) => {
 
 const deleteWhatsInclude = catchAsync(async (req, res) => {
   const result = await WhatsIncludeService.deleteWhatsInclude(
-    req.params.id
+    req.params.id as string
   );
   manageResponse(res, {
     success: true,

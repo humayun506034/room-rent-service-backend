@@ -107,7 +107,7 @@ const getAllProduct = catchAsync(async (req, res) => {
 
 const getSingleProduct = catchAsync(async (req, res) => {
   console.log(req.params.id);
-  const result = await ProductService.getSingleProduct(req.params.id);
+  const result = await ProductService.getSingleProduct(req.params.id as string);
   manageResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -118,7 +118,7 @@ const getSingleProduct = catchAsync(async (req, res) => {
 
 const addBookingDate = catchAsync(async (req, res) => {
   const result = await ProductService.addBookingDate(
-    req.params.id,
+    req.params.id as string,
     req.body.date
   );
   manageResponse(res, {
@@ -179,7 +179,7 @@ const getMySelfProduct = catchAsync(
 const addViewedProduct = catchAsync(
   async (req: Request & { loggedUser?: any }, res) => {
     const result = await ProductService.addViewedProduct(
-      req.params.id,
+      req.params.id as string,
       req.loggedUser._id
     );
     manageResponse(res, {
@@ -194,7 +194,7 @@ const addViewedProduct = catchAsync(
 const addQueryProduct = catchAsync(
   async (req: Request & { loggedUser?: any }, res) => {
     const result = await ProductService.addQueryProduct(
-      req.params.id,
+      req.params.id as string,
       req.loggedUser._id
     );
     manageResponse(res, {
@@ -281,7 +281,7 @@ const getAllNotPublishedProduct = catchAsync(
 
 const makeProductPublished = catchAsync(
   async (req: Request & { loggedUser?: any }, res) => {
-    const result = await ProductService.makeProductPublished(req.params._id);
+    const result = await ProductService.makeProductPublished(req.params._id as string);
     manageResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
