@@ -27,7 +27,6 @@ app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
         status: 'success',
         message: 'Server is running successful !!',
-        data: null,
     });
 });
 
