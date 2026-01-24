@@ -1,8 +1,0 @@
-<<<<<<< HEAD
-2025/12/13-10:16:21.397 85c Reusing MANIFEST E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\shared_proto_db/MANIFEST-000001
-2025/12/13-10:16:21.404 85c Recovering log #3
-2025/12/13-10:16:21.405 85c Reusing old log E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\shared_proto_db/000003.log 
-=======
-2025/12/08-17:41:34.903 80 Creating DB E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\shared_proto_db since it was missing.
-2025/12/08-17:41:34.957 80 Reusing MANIFEST E:\Projects\room-rent-service-backend\.wwebjs_auth\session\Default\shared_proto_db/MANIFEST-000001
->>>>>>> f2ecd340f8be3987c60fef1589455a75911c080c
