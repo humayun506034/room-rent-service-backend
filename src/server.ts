@@ -1,33 +1,18 @@
 
-// import mongoose from "mongoose";
-// import app from "./app";
-// import { configs } from "./app/configs";
-// async function main() {
-//     await mongoose.connect(configs.db_url!);
-//     app.listen(configs.port, () => {
-//         console.log(`Server listening on port  ${configs.port}`);
-//     });
-// }
-
-// main().catch(err => console.log(err));
-
-
+import "dotenv/config";
 import mongoose from "mongoose";
 import { configs } from "./app/configs";
-// import { initWhatsApp } from "./app/utils/whatsappClient";
 import app from "./app";
-import { initWhatsApp } from "./app/utils/whatsappClient";
-
-
-
 
 async function main() {
 
-await mongoose.connect(configs.db_url!);
+  console.log(process.env.DB_URL)
 
-  console.log("🚀 Initializing WhatsApp...");
-  initWhatsApp();
+  const databaseUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/yannyamba";
+  // const databaseUrl = process.env.DB_URL || "mongodb+srv://humayun506034_db_user:6PsiQVjtkWe3IbTg@cluster0.vk7gre3.mongodb.net/yannyamba?appName=Cluster0";
 
+  await mongoose.connect('mongodb://127.0.0.1:27017/yannyamba');
+  // await mongoose.connect("mongodb+srv://humayun506034_db_user:6PsiQVjtkWe3IbTg@cluster0.vk7gre3.mongodb.net/yannyamba?appName=Cluster0");
   app.listen(configs.port, () => {
     console.log(`Server running on port ${configs.port}`);
   });

@@ -14,6 +14,15 @@ const register_user = catchAsync(async (req, res) => {
     })
 })
 
+const temp_register = catchAsync(async (req, res) => {
+    const result = await auth_services.temp_register(req?.body)
+    manageResponse(res, {
+        success: true,
+        message: "Account created successful",
+        statusCode: httpStatus.OK,
+        data: result
+    })
+})
 
 const resend_register_otp = catchAsync(async (req, res) => {
     const result = await auth_services.resend_register_otp(req?.body)
@@ -78,6 +87,7 @@ export const auth_controllers = {
     login_user,
     resend_register_otp,
     resend_login_otp,
-    verify_login_otp
+    verify_login_otp,
+    temp_register
   
 }
