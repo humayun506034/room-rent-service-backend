@@ -5,9 +5,14 @@ import { User_Model } from "../user/user.schema";
 import { jwtHelpers } from "../../utils/JWT";
 import { configs } from "../../configs";
 import { Secret } from "jsonwebtoken";
+import { sendOtp } from "../../utils/sendOtp";
+
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000);
+}
 
 const register_user_into_db = async (payload: TUser) => {
-  console.log(payload);
+  // console.log(payload);
   // 1. Check existing user
   const isExistUser = await User_Model.findOne({
     phone: payload.phone,
@@ -19,7 +24,7 @@ const register_user_into_db = async (payload: TUser) => {
   }
 
   // 2. Generate OTP
-  // const registerVerificationOtp = generateOTP(6);
+  const registerVerificationOtp = generateOTP();
 
   // Option A: store OTP directly on user document (simple demo)
   // make sure your User schema has fields: otp, otpExpiresAt
@@ -27,7 +32,7 @@ const register_user_into_db = async (payload: TUser) => {
 
   const userToCreate = {
     ...payload,
-    // registerVerificationOtp,
+    registerVerificationOtp,
     registerOtpExpiresAt,
     isVerified: false, // for example
   };
@@ -36,9 +41,7 @@ const register_user_into_db = async (payload: TUser) => {
   const result = await User_Model.create(userToCreate);
 
   try {
-    // ✅ ekhane payload.phone holo full number with country code
-    // await sendOtpViaWhatsApp(payload.phone, registerVerificationOtp);
-    // await sendOtpViaWhatsApp("+8801747477746", "123456")
+    await sendOtp(payload.phone, "register", registerVerificationOtp);
   } catch (err) {
     console.error("Failed to send OTP via WhatsApp:", err);
     // ichcha korle ekhane error throw korte paro
@@ -75,18 +78,18 @@ const resend_register_otp = async (payload: { phone: string }) => {
   }
 
   // 3️⃣ Generate new OTP
-  // const newOtp = generateOTP(6);
+  const newOtp = generateOTP();
   const newOtpExpiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
 
   // 4️⃣ Update OTP info
-  // isExistUser.registerVerificationOtp = Number(newOtp);
+  isExistUser.registerVerificationOtp = Number(newOtp);
   isExistUser.registerOtpExpiresAt = newOtpExpiresAt;
 
   await isExistUser.save();
 
   // 5️⃣ Send OTP via WhatsApp
   try {
-    // await sendOtpViaWhatsApp(payload.phone, newOtp);
+    await sendOtp(payload.phone, "resend register", newOtp);
   } catch (err) {
     console.error("Failed to resend OTP:", err);
     // If you want:
@@ -160,7 +163,7 @@ const login_user_from_db = async (payload: { phone: string }) => {
   }
 
   // ✅ Generate login OTP
-  // const loginVerificationOtp = generateOTP(6);
+  const loginVerificationOtp = generateOTP();
   const loginOtpExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
   // user.loginVerificationOtp = Number(loginVerificationOtp);
@@ -170,7 +173,7 @@ const login_user_from_db = async (payload: { phone: string }) => {
 
   // ✅ Send OTP
   try {
-    // await sendOtpViaWhatsApp(payload.phone, loginVerificationOtp);
+    await sendOtp(payload.phone, "login", loginVerificationOtp);
   } catch (err) {
     console.error("Failed to send login OTP:", err);
   }
@@ -195,16 +198,16 @@ const resend_login_otp = async (payload: { phone: string }) => {
     throw new AppError("Account not verified", httpStatus.BAD_REQUEST);
   }
 
-  // const newOtp = generateOTP(6);
+  const newOtp = generateOTP();
   const newOtpExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-  // user.loginVerificationOtp = Number(newOtp);
+  user.loginVerificationOtp = Number(newOtp);
   user.loginOtpExpiresAt = newOtpExpiresAt;
 
   await user.save();
 
   try {
-    // await sendOtpViaWhatsApp(payload.phone, newOtp);
+    await sendOtp(payload.phone,"resend login", newOtp);
   } catch (err) {
     console.error("Failed to resend login OTP:", err);
   }
@@ -257,15 +260,6 @@ const verify_login_otp = async (payload: { phone: string; otp: string }) => {
   };
 };
 
-const temp_register = async (payload: TUser) => {
-  payload.roles = ["RENTER", "OWNER"];
-  const user = await User_Model.create(payload);
-  return {
-    Message: "User created successfully",
-    data: user,
-  };
-};
-
 export const auth_services = {
   register_user_into_db,
   login_user_from_db,
@@ -273,5 +267,4 @@ export const auth_services = {
   resend_register_otp,
   verify_login_otp,
   resend_login_otp,
-  temp_register
 };
